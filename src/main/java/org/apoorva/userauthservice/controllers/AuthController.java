@@ -1,10 +1,12 @@
 package org.apoorva.userauthservice.controllers;
 
+import org.antlr.v4.runtime.misc.Pair;
 import org.apoorva.userauthservice.dtos.LoginRequestDTO;
 import org.apoorva.userauthservice.dtos.SignupRequestDTO;
 import org.apoorva.userauthservice.dtos.UserDTO;
 import org.apoorva.userauthservice.models.User;
 import org.apoorva.userauthservice.services.IAuthService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,9 +34,18 @@ public class AuthController {
 
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody LoginRequestDTO loginRequest) {
-        User user = authService.logIn(loginRequest.getEmail(), loginRequest.getPassword());
+        Pair<User, String> response = authService.logIn(loginRequest.getEmail(), loginRequest.getPassword());
+
+        User user = response.a;
+        String token = response.b;
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.SET_COOKIE, token);
+
         return ResponseEntity
-                .ok(from(user));
+                .ok()
+                .headers(headers)
+                .body(from(user));
     }
 
     public UserDTO from(User user) {
