@@ -4,6 +4,7 @@ import org.antlr.v4.runtime.misc.Pair;
 import org.apoorva.userauthservice.dtos.LoginRequestDTO;
 import org.apoorva.userauthservice.dtos.SignupRequestDTO;
 import org.apoorva.userauthservice.dtos.UserDTO;
+import org.apoorva.userauthservice.dtos.ValidateTokenDto;
 import org.apoorva.userauthservice.models.User;
 import org.apoorva.userauthservice.services.IAuthService;
 import org.springframework.http.HttpHeaders;
@@ -46,6 +47,12 @@ public class AuthController {
                 .ok()
                 .headers(headers)
                 .body(from(user));
+    }
+
+    @PostMapping("/validateToken")
+    public Boolean validateToken(@RequestBody ValidateTokenDto validateToken) {
+
+        return authService.validateToken(validateToken.getToken(), validateToken.getUserId());
     }
 
     public UserDTO from(User user) {

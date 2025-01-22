@@ -1,6 +1,7 @@
 package org.apoorva.userauthservice.controllers;
 
 import org.apoorva.userauthservice.exceptions.PasswordMismatchException;
+import org.apoorva.userauthservice.exceptions.UnauthorisedException;
 import org.apoorva.userauthservice.exceptions.UserAlreadyExistException;
 import org.apoorva.userauthservice.exceptions.UserNotRegisteredException;
 import org.springframework.http.HttpStatus;
@@ -42,6 +43,13 @@ public class ControllerAdvice {
         return ResponseEntity
                 .status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .build();
+    }
+
+    @ExceptionHandler(UnauthorisedException.class)
+    public ResponseEntity<String> handleUnauthorisedException(final UnauthorisedException e) {
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(e.getMessage());
     }
 
 
