@@ -13,10 +13,9 @@ import java.time.LocalDateTime;
 @Setter
 @MappedSuperclass
 public abstract class BaseModel {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
     private LocalDateTime createdAt;
+
     private LocalDateTime updatedAt;
+
     private Status status;
 }
